@@ -141,37 +141,59 @@ download_and_unzip() {
     rm temp.zip
 }
 
-# Bootstrap
+# ---- Bootstrap ----
 BOOTSTRAP_VERSION=5.0.2
 BOOTSTRAP_DIR="$BM_LINKED_SITE_DIR/library/bootstrap"
 mkdir -p "$BOOTSTRAP_DIR"
-download_and_unzip "https://github.com/twbs/bootstrap/releases/download/v${BOOTSTRAP_VERSION}/bootstrap-${BOOTSTRAP_VERSION}-dist.zip" "$BOOTSTRAP_DIR"
+
+# unzip into temp, then move contents up one level
+TMP_BOOTSTRAP_DIR=$(mktemp -d)
+download_and_unzip "https://github.com/twbs/bootstrap/releases/download/v${BOOTSTRAP_VERSION}/bootstrap-${BOOTSTRAP_VERSION}-dist.zip" "$TMP_BOOTSTRAP_DIR"
+mv "$TMP_BOOTSTRAP_DIR/bootstrap-${BOOTSTRAP_VERSION}-dist/"* "$BOOTSTRAP_DIR/"
+rm -rf "$TMP_BOOTSTRAP_DIR"
+
+# Add dark theme CSS
+mkdir -p "$BOOTSTRAP_DIR/css"
 wget -q -O "$BOOTSTRAP_DIR/css/bootstrap-dark.min.css" "https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.2/dist/css/bootstrap-dark.min.css"
+
+# Add Bootstrap icons
+mkdir -p "$BM_LINKED_SITE_DIR/media"
 wget -q -O "$BM_LINKED_SITE_DIR/media/bootstrap-icons.svg" "https://raw.githubusercontent.com/twbs/icons/main/bootstrap-icons.svg"
 
-# HLS.js
+# ---- HLS.js ----
 HLS_JS_VERSION=1.0.11
-download_and_unzip "https://github.com/video-dev/hls.js/releases/download/v${HLS_JS_VERSION}/release.zip" "$BM_LINKED_SITE_DIR/library/hls-js/dist"
+HLS_DIR="$BM_LINKED_SITE_DIR/library/hls-js/dist"
+mkdir -p "$HLS_DIR"
+download_and_unzip "https://github.com/video-dev/hls.js/releases/download/v${HLS_JS_VERSION}/release.zip" "$HLS_DIR"
 
-# Anime.js
+# ---- Anime.js ----
 ANIME_VERSION=3.2.1
-download_and_unzip "https://github.com/juliangarnier/anime/archive/refs/tags/v${ANIME_VERSION}.zip" "$BM_LINKED_SITE_DIR/library/anime" "anime-${ANIME_VERSION}/lib"
+ANIME_DIR="$BM_LINKED_SITE_DIR/library/anime"
+mkdir -p "$ANIME_DIR"
+download_and_unzip "https://github.com/juliangarnier/anime/archive/refs/tags/v${ANIME_VERSION}.zip" "$ANIME_DIR" "anime-${ANIME_VERSION}/lib"
 
-# NoSleep.js
+# ---- NoSleep.js ----
 NOSLEEP_JS_VERSION=0.12.0
-download_and_unzip "https://github.com/richtr/NoSleep.js/archive/refs/tags/v${NOSLEEP_JS_VERSION}.zip" "$BM_LINKED_SITE_DIR/library/nosleep-js/dist"
+NOSLEEP_DIR="$BM_LINKED_SITE_DIR/library/nosleep-js/dist"
+mkdir -p "$NOSLEEP_DIR"
+download_and_unzip "https://github.com/richtr/NoSleep.js/archive/refs/tags/v${NOSLEEP_JS_VERSION}.zip" "$NOSLEEP_DIR"
 
-# Video.js
+# ---- Video.js ----
 VIDEOJS_VERSION=7.13.3
-download_and_unzip "https://github.com/videojs/video.js/releases/download/v${VIDEOJS_VERSION}/video-js-${VIDEOJS_VERSION}.zip" "$BM_LINKED_SITE_DIR/library/video-js"
+VIDEOJS_DIR="$BM_LINKED_SITE_DIR/library/video-js"
+mkdir -p "$VIDEOJS_DIR"
+download_and_unzip "https://github.com/videojs/video.js/releases/download/v${VIDEOJS_VERSION}/video-js-${VIDEOJS_VERSION}.zip" "$VIDEOJS_DIR"
 
-# jQuery
+# ---- jQuery ----
+mkdir -p "$BM_LINKED_SITE_DIR/library"
 JQUERY_VERSION=3.6.0
 wget -q -O "$BM_LINKED_SITE_DIR/library/jquery.min.js" "https://code.jquery.com/jquery-${JQUERY_VERSION}.min.js"
 
-# JS-Cookie
+# ---- JS-Cookie ----
 JS_COOKIE_VERSION=3.0.1
-wget -q -O "$BM_LINKED_SITE_DIR/library/js-cookie/js/js.cookie.min.js" "https://github.com/js-cookie/js-cookie/releases/download/v${JS_COOKIE_VERSION}/js.cookie.min.js"
+JS_COOKIE_DIR="$BM_LINKED_SITE_DIR/library/js-cookie/js"
+mkdir -p "$JS_COOKIE_DIR"
+wget -q -O "$JS_COOKIE_DIR/js.cookie.min.js" "https://github.com/js-cookie/js-cookie/releases/download/v${JS_COOKIE_VERSION}/js.cookie.min.js"
 
 cd -
 rm -rf "$TMP_DIR"
