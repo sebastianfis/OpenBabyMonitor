@@ -85,8 +85,6 @@ sed 's/export //g' "$BM_ENV_EXPORTS_PATH" > "$BM_ENV_PATH"
 # ----------------------------------------
 # MySQL root password
 # ----------------------------------------
-MYSQL_ROOT_PASSWORD=$(python3 -c "import json; f=open('$BM_DIR/config/config.json'); print(json.load(f)['database']['root_account']['password']); f.close()")
-SQL_CMD="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';"
 mysql <<_EOF_
 $SQL_CMD
 DELETE FROM mysql.user WHERE User='' OR (User='root' AND Host NOT IN ('localhost','127.0.0.1','::1'));
