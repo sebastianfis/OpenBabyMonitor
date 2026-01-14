@@ -1,4 +1,4 @@
-#!/home/jsed/OpenBabyMonitor/venv/bin/python3
+#!/home/pi/OpenBabyMonitor/venv/bin/python3
 import re
 import json
 
