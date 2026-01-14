@@ -86,10 +86,14 @@ sed 's/export //g' "$BM_ENV_EXPORTS_PATH" > "$BM_ENV_PATH"
 # MySQL root password
 # ----------------------------------------
 mysql <<_EOF_
-$SQL_CMD
 DELETE FROM mysql.user WHERE User='' OR (User='root' AND Host NOT IN ('localhost','127.0.0.1','::1'));
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db IN ('test','test\_%');
+FLUSH PRIVILEGES;
+
+CREATE DATABASE IF NOT EXISTS babymonitor;
+CREATE USER IF NOT EXISTS 'babymonitor'@'localhost' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON babymonitor.* TO 'babymonitor'@'localhost';
 FLUSH PRIVILEGES;
 _EOF_
 
