@@ -199,6 +199,24 @@ cd -
 rm -rf "$TMP_DIR"
 
 # ----------------------------------------
+# Apache startup stability fixes (Raspberry Pi OS)
+# ----------------------------------------
+
+APACHE_MAIN_CONF="/etc/apache2/apache2.conf"
+APACHE_SERVERNAME_CONF="/etc/apache2/conf-available/servername.conf"
+
+# Disable reverse DNS lookups (prevents startup hangs)
+if ! grep -q "^HostnameLookups Off" "$APACHE_MAIN_CONF"; then
+    sed -i '1i HostnameLookups Off\n' "$APACHE_MAIN_CONF"
+fi
+
+# Set a global ServerName to avoid DNS resolution stalls
+if [[ ! -f "$APACHE_SERVERNAME_CONF" ]]; then
+    echo "ServerName 127.0.0.1" > "$APACHE_SERVERNAME_CONF"
+    a2enconf servername
+fi
+
+# ----------------------------------------
 # Final: restart Apache
 # ----------------------------------------
 ln -sfn "$BM_LINKED_SITE_DIR" "$BM_SITE_DIR"
