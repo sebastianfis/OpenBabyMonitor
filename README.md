@@ -207,6 +207,14 @@ ssh pi@<hostname>
 
 ## Troubleshooting
 
+#### Switching to local WiFi does not work through the UI
+
+This can be caused by special characters in either network SSID or password. You can switch to client mode via SSH and connect it to a network. Run this command over SSH:
+```
+nohup $BM_SERVERCONTROL_DIR/connect_to_network.sh --save 'your network SSID' 'your network password' &
+```
+Make sure you use single quotation marks('text') instead of double quotation marks("text"). Otherwise some special characters will be interpreted as system specific calls on Raspian!
+
 #### I can't access the web application at https://babymonitor when the baby monitor is connected to the local Wi-Fi
 
 In the above URL, `babymonitor` is the hostname of the Pi. Many routers automatically append a suffix like `.local`, `.home` or `.lan` to the hostnames of the devices on its network, so if the short version of the URL doesn't work, try adding one of the suffixes. No suffix is required when connected to the Pi's access point.
